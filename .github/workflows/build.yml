@@ -7,14 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Tim source
+      - name: Giai nen source
         run: |
-          if [ -f build.gradle ]; then
-            echo "DIR=." >> $GITHUB_ENV
-          else
-            unzip -o ./*.zip -d proj
-            echo "DIR=proj" >> $GITHUB_ENV
-          fi
+          mkdir -p work
+          unzip -qo lananh-client-source-no-shader.zip -d work
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -22,8 +18,10 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.12
-      - run: gradle build -p ${{ env.DIR }}
+      - name: Build
+        working-directory: work
+        run: gradle build --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: LanAnhClient-jar
-          path: ${{ env.DIR }}/build/libs/*.jar
+          path: work/build/libs/*.jar
