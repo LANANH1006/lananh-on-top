@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Giai nen source
+      - name: Giai nen
         run: |
-          mkdir -p work
-          unzip -qo lananh-client-source-no-shader.zip -d work
+          mkdir proj
+          unzip -o lananh-client-source-no-shader.zip -d proj
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -18,10 +18,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.12
-      - name: Build
-        working-directory: work
-        run: gradle build --no-daemon
+      - run: gradle build --no-daemon -p proj
       - uses: actions/upload-artifact@v4
         with:
           name: LanAnhClient-jar
-          path: work/build/libs/*.jar
+          path: proj/build/libs/*.jar
